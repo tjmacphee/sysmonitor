@@ -1,28 +1,25 @@
-#include <windows.h>
-#include <iostream>
 #include <gtkmm.h>
+#include <gtkmm/application.h>
+#include <gtkmm/window.h>
+#include <gtkmm/builder.h>
 
-// void PrintSystemInfo() {
-//     SYSTEM_INFO si;
-//     GetSystemInfo(&si);
+int main(int argc, char *argv[]) {
+    auto app = Gtk::Application::create(argc, argv, "org.gtkmm.example");
 
-//     std::cout << "Processor Architecture: " << si.wProcessorArchitecture << std::endl;
-//     std::cout << "Number of Processors: " << si.dwNumberOfProcessors << std::endl;
+    // Create a Gtk::Builder instance
+    auto refBuilder = Gtk::Builder::create();
+    
+    // Load the UI from the Glade file
+    refBuilder->add_from_file("../ui/ui.glade");
 
-//     MEMORYSTATUSEX memInfo;
-//     memInfo.dwLength = sizeof(MEMORYSTATUSEX);
-//     GlobalMemoryStatusEx(&memInfo);
+    // Get the main window pointer from the UI
+    Gtk::Window* pWindow = nullptr;
+    refBuilder->get_widget("main_window", pWindow);
 
-//     std::cout << "Total Physical Memory: " << memInfo.ullTotalPhys / (1024 * 1024) << " MB" << std::endl;
-//     std::cout << "Available Physical Memory: " << memInfo.ullAvailPhys / (1024 * 1024) << " MB" << std::endl;
-// }
+    if (pWindow) {
+        // Run the application with the main window
+        return app->run(*pWindow);
+    }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    auto app = Gtk::Application::create(__argc, __argv, "org.gtkmm.examples.base");
-
-    Gtk::Window window;
-    window.set_default_size(800, 600);
-    window.set_title("Hello, gtkmm!");
-
-    return app->run(window);
+    return 1;
 }
